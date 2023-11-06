@@ -7,4 +7,7 @@ Recommended to create a virtual environment for scraping.
 Create a virtual environment with
 ```python -m venv .venv```
 And enter into it with
-````python -m .venv/Scripts/activate``
+```python -m .venv/Scripts/activate```
+Install dependencies with 
+```python -m pip install BeautifulSoup4```
+```python -m pip install requests```
