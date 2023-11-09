@@ -1,9 +1,7 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-import time
 from bs4 import BeautifulSoup
 
 # Init driver
@@ -18,7 +16,7 @@ def get_searches(query: str, driver: webdriver):
        EC.visibility_of_element_located((By.CSS_SELECTOR, "article[data-test-id=product-card]"))
    )
 
-get_searches("lihapiirakka", driver)
+get_searches("kana", driver)
 
 soup = BeautifulSoup(driver.page_source, "html.parser")
 beautiful_page = soup.prettify()
