@@ -1,6 +1,8 @@
 from selenium_scrape import get_searches
 
-get_searches("juusto", False, "lowest_comparison_price")
+results = get_searches("maito", True, False)
+
+print(results[0])
 
 # You can also use the default values:
-# get_searches("juusto", False)
+# get_searches("juusto", True)

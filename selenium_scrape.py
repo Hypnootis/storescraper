@@ -15,12 +15,14 @@ def init_driver() -> webdriver:
     driver = webdriver.Chrome(options=chrome_options)
     return driver
 
-def get_searches(query: str, output_json: bool, sorting_parameters=""):
+def get_searches(query: str, output_json: bool, print_results=False, sorting_parameters="") -> dict:
     """Query the S-Kaupat database
 
     query: str, the query string
 
     output_json: bool, if False, prints query results, if True, outputs to queryResults.json
+
+    print_results: bool, if True, prints results to console
 
     sorting_parameters: "lowest_comparison_price", "highest_comparison_price" or leave blank for no sorting
 
@@ -35,24 +37,24 @@ def get_searches(query: str, output_json: bool, sorting_parameters=""):
         EC.visibility_of_element_located((By.CSS_SELECTOR, "article[data-test-id=product-card]"))
    )
     soup = BeautifulSoup(driver.page_source, "html.parser")
+    products_json = query_to_json(soup)
     if output_json:
-       query_to_json(soup, False)
-    else:
-        query_to_json(soup, True)
+       with open("queryResults.json", "w") as file:
+           json.dump(products_json, file, indent=4)
+
+    if print_results:
+        print(products_json)
     driver.quit()
 
-def query_to_json(soup: BeautifulSoup, only_print: bool):
+    return products_json
+
+
+def query_to_json(soup: BeautifulSoup) -> dict:
     products = {}
     for index, tag in enumerate(soup.select("article[data-test-id=product-card]", limit=5)):
-        if only_print:
-            print("Product name: " + tag.select_one("a[data-test-id=product-card__productName]").text)
-            print("Product price: " + tag.select_one("span[data-test-id=product-price__unitPrice]").text)
-            print("Product comparison price: " + tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text)
-        else:
-            products.update({index: {}})
-            products[index].update({"product_name": tag.select_one("a[data-test-id=product-card__productName]").text})
-            products[index].update({"Unit price": tag.select_one("span[data-test-id=product-price__unitPrice]").text})
-            products[index].update({"Comparison price": tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text})
+        products.update({index: {}})
+        products[index].update({"product_name": tag.select_one("a[data-test-id=product-card__productName]").text})
+        products[index].update({"Unit price": tag.select_one("span[data-test-id=product-price__unitPrice]").text})
+        products[index].update({"Comparison price": tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text})
 
-            with open("queryResults.json", "w") as file:
-                json.dump(products, file, indent=4)
+    return products
