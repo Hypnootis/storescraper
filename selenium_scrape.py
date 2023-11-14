@@ -15,12 +15,10 @@ def init_driver() -> webdriver:
     driver = webdriver.Chrome(options=chrome_options)
     return driver
 
-def get_searches(query: str, output_json: bool, sorting_parameters="", results=5):
+def get_searches(query: str, output_json: bool, sorting_parameters=""):
     """Query the S-Kaupat database
 
     query: str, the query string
-
-    results: int, how many results are given
 
     output_json: bool, if False, prints query results, if True, outputs to queryResults.json
 
@@ -38,26 +36,23 @@ def get_searches(query: str, output_json: bool, sorting_parameters="", results=5
    )
     soup = BeautifulSoup(driver.page_source, "html.parser")
     if output_json:
-       query_to_json(soup, False, results)
+       query_to_json(soup, False)
     else:
-        query_to_json(soup, True, results)
+        query_to_json(soup, True)
     driver.quit()
 
-def query_to_json(soup: BeautifulSoup, only_print: bool, amount: int):
+def query_to_json(soup: BeautifulSoup, only_print: bool):
     products = {}
-    for index, tag in enumerate(soup.select("article[data-test-id=product-card]", limit=amount)):
-        if tag.select_one("a[data-test-id=product-card__ProductName]") is None:
-            break
+    for index, tag in enumerate(soup.select("article[data-test-id=product-card]", limit=5)):
+        if only_print:
+            print("Product name: " + tag.select_one("a[data-test-id=product-card__productName]").text)
+            print("Product price: " + tag.select_one("span[data-test-id=product-price__unitPrice]").text)
+            print("Product comparison price: " + tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text)
         else:
-            if only_print:
-                print("Product name: " + tag.select_one("a[data-test-id=product-card__productName]").text)
-                print("Product price: " + tag.select_one("span[data-test-id=product-price__unitPrice]").text)
-                print("Product comparison price: " + tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text)
-            else:
-                products.update({index: {}})
-                products[index].update({"product_name": tag.select_one("a[data-test-id=product-card__productName]").text})
-                products[index].update({"Unit price": tag.select_one("span[data-test-id=product-price__unitPrice]").text})
-                products[index].update({"Comparison price": tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text})
+            products.update({index: {}})
+            products[index].update({"product_name": tag.select_one("a[data-test-id=product-card__productName]").text})
+            products[index].update({"Unit price": tag.select_one("span[data-test-id=product-price__unitPrice]").text})
+            products[index].update({"Comparison price": tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text})
 
-                with open("queryResults.json", "w") as file:
-                    json.dump(products, file, indent=4)
+            with open("queryResults.json", "w") as file:
+                json.dump(products, file, indent=4)
