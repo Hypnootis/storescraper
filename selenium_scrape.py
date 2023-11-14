@@ -54,7 +54,7 @@ def query_to_json(soup: BeautifulSoup) -> dict:
     for index, tag in enumerate(soup.select("article[data-test-id=product-card]", limit=5)):
         products.update({index: {}})
         products[index].update({"product_name": tag.select_one("a[data-test-id=product-card__productName]").text})
-        products[index].update({"Unit price": tag.select_one("span[data-test-id=product-price__unitPrice]").text})
-        products[index].update({"Comparison price": tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text})
+        products[index].update({"unit_price": tag.select_one("span[data-test-id=product-price__unitPrice]").text})
+        products[index].update({"comparison_price": tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text})
 
     return products
