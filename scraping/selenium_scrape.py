@@ -53,8 +53,20 @@ def query_to_json(soup: BeautifulSoup) -> dict:
     products = {}
     for index, tag in enumerate(soup.select("article[data-test-id=product-card]", limit=5)):
         products.update({index: {}})
-        products[index].update({"product_name": tag.select_one("a[data-test-id=product-card__productName]").text})
-        products[index].update({"unit_price": tag.select_one("span[data-test-id=product-price__unitPrice]").text})
-        products[index].update({"comparison_price": tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text})
+        product_name = tag.select_one("a[data-test-id=product-card__productName]").text
+        unit_price = tag.select_one("span[data-test-id=product-price__unitPrice]").text.split(" ")[0]
+        unit_price = unit_price.replace(",", ".")
+        comparison_price_with_unit = tag.select_one("div[data-test-id=product-card__productPrice__comparisonPrice]").text
+        comparison_price_unit = ""
+        if comparison_price_with_unit[-1] == "l":
+            comparison_price_unit = "l"
+        else:
+            comparison_price_unit = "kg"
+        comparison_price = comparison_price_with_unit.split(" ")[0]
+        comparison_price = unit_price.replace(",", ".")
+        products[index].update({"productName": product_name,
+                                "unitPrice": float(unit_price),
+                                "comparisonPrice": float(comparison_price),
+                                "unit": comparison_price_unit})
 
     return products
