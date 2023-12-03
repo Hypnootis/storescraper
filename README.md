@@ -3,6 +3,8 @@ Scraping product prices from the S-Kaupat grocery website
 
 Scraping is done with the 'selenium' and 'BeautifulSoup4 4.12.2' libraries. You'll also need a [webdriver](https://www.selenium.dev/documentation/webdriver/)!
 
+Check out the [selenium_scrape.py](https://github.com/Hypnootis/storescraper/blob/main/scraping/selenium_scrape.py) file for the source code
+
 ## Steps to test:
 
 
