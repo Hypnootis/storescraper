@@ -25,7 +25,7 @@ Recommended to create a virtual environment for the dependencies, and make sure 
 
 ```.venv/Scripts/activate```
 
-Or if you're on Unix/MacOS:
+Or if you're on *nix/MacOS:
 
 ```source .venv/bin/activate```
 
