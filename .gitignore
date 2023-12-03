@@ -1,5 +1,5 @@
-.venv
+*.html
 __pycache__
-selenium_cheeses.html
-cheeses.html
-queryResults.json
+node_modules
+.venv
+*.json
