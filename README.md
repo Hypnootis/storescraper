@@ -1,8 +1,9 @@
 # storescraper
 Scraping product prices from grocery stores and giving tips
 
-Scraping is done with the 'selenium' and 'BeautifulSoup4 4.12.2' libraries.
-Recommended to create a virtual environment for these dependencies.
+Scraping is done with the 'selenium' and 'BeautifulSoup4 4.12.2' libraries. You'll also need a [webdriver](https://www.selenium.dev/documentation/webdriver/)!
+
+Recommended to create a virtual environment for the dependencies.
 
 If you don't have Python virtual environment installed
 
@@ -21,6 +22,6 @@ Or if you're on Unix/MacOS
 ```source .venv/bin/activate```
 
 Install dependencies with 
-```pip install -r ./requirements.txt```
+```cd scraping && pip install -r ./requirements.txt```
 
 You can then run test.py to test out the scraping.
